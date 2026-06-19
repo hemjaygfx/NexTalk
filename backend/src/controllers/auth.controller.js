@@ -45,16 +45,23 @@ export const register = async (req, res) => {
         });  
 
         if (newUser) {
-            generateToken(newUser._id, res);
-            await newUser.save();
+            // before CR 
+            //generateToken(newUser._id, res);
+            // await newUser.save();
+
+            // after CR 
+            // persist user first, then issue auth cookie
+            const savedUser = await newUser.save();
+            generateToken(savedUser._id, res);
+
              res.status(201).json({
-                _id: newUser._id,
-                username: newUser.username, 
-                fullName: newUser.fullName,
-                email: newUser.email,
+                _id: savedUser._id,
+                username: savedUser.username, 
+                fullName: savedUser.fullName,
+                email: savedUser.email,
                 profilePic: newUser.profilePic
             });
-            
+
             // Todo: send a welcome email to user after successful registration
         } else {
              res.status(400).json({message: 'Failed to create user'});
