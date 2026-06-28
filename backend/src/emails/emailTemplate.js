@@ -1,5 +1,37 @@
 
+function escapeHtml(value) {
+    return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function sanitizeClientUrl(clientURL) {
+    if (typeof clientURL !== 'string') {
+        return '#';
+    }
+
+    const trimmedValue = clientURL.trim();
+    if (!trimmedValue) {
+        return '#';
+    }
+
+    try {
+        const parsedUrl = new URL(trimmedValue);
+        if (!['http:', 'https:'].includes(parsedUrl.protocol)) {
+            return '#';
+        }
+        return escapeHtml(parsedUrl.toString());
+    } catch {
+        return '#';
+    }
+}
+
 export function createWelcomeEmailTemplate(name, clientURL) {
+    const safeName = escapeHtml(name);
+    const safeClientURL = sanitizeClientUrl(clientURL);
 
     return `
     <!DOCTYPE html>
@@ -14,7 +46,7 @@ export function createWelcomeEmailTemplate(name, clientURL) {
     <div style="display: inline-block; margin-bottom: 20px;">
     <span style="font-family: 'Playfair Display', Georgia, serif; font-size: 36px; font-weight: 700; color: #d4af37; letter-spacing: 1px;">NexTalk</span>
     </div>
-    <h1 style="font-family: 'Playfair Display', Georgia, serif; color: #f5f5f0; margin: 0; font-size: 26px; font-weight: 500;">Welcome, ${name}</h1>
+    <h1 style="font-family: 'Playfair Display', Georgia, serif; color: #f5f5f0; margin: 0; font-size: 26px; font-weight: 500;">Welcome, ${safeName}</h1>
     </div>
     <div style="background-color: #12121a; padding: 35px; border-radius: 0 0 12px 12px; border: 1px solid #2a2a35; border-top: none; box-shadow: 0 4px 20px rgba(0,0,0,0.4);">
     <p style="font-size: 16px; color: #d4d4d4; margin-top: 0;">We're glad to have you on NexTalk — a space for real-time conversations with the people who matter to you, wherever they are.</p>
@@ -30,7 +62,7 @@ export function createWelcomeEmailTemplate(name, clientURL) {
       </div>
       
     <div style="text-align: center; margin: 30px 0;">
-      <a href="${clientURL}" style="background: linear-gradient(135deg, #d4af37 0%, #b8932e 100%); color: #0a0a0f; text-decoration: none; padding: 13px 34px; border-radius: 50px; font-weight: 600; display: inline-block; letter-spacing: 0.3px;">Open NexTalk</a>
+      <a href="${safeClientURL}" style="background: linear-gradient(135deg, #d4af37 0%, #b8932e 100%); color: #0a0a0f; text-decoration: none; padding: 13px 34px; border-radius: 50px; font-weight: 600; display: inline-block; letter-spacing: 0.3px;">Open NexTalk</a>
     </div>
 
     <p style="margin-bottom: 5px; color: #b8b8b8;">If you need any help or have questions, we're always here to assist you.</p>
