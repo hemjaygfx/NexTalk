@@ -71,3 +71,45 @@ export const register = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
+
+export const login = async (req, res) => {
+    try {
+        const { email, password } = req.body ?? {};
+        const normalizedEmail = typeof email === 'string' ? email.trim() : '';
+
+        // check if all fields are filled
+        if (!normalizedEmail || typeof password !== 'string' || !password) {
+            return res.status(400).json({ message: 'All fields are required' });
+        }
+
+        const user = await User.findOne({ email: normalizedEmail });
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid email or password' });
+        } // never tell the user which one is wrong for security reasons
+
+        const isMatch = await bcryptjs.compare(password, user.password);
+        if (!isMatch) {            return res.status(400).json({ message: 'Invalid email or password' });
+        }
+
+        generateToken(user._id, res);
+
+        res.status(200).json({
+            _id: user._id,
+            username: user.username,
+            fullName: user.fullName,
+            email: user.email,
+            profilePic: user.profilePic || ''
+        });
+    } catch (error) {
+        console.log('Error in login controller:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+export const logout = async (_, res) => {
+
+    res.cookie('jwt', '', {
+        maxAge: 0
+    });
+    res.status(200).json({ message: 'Logged out successfully' });
+};
