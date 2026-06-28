@@ -62,7 +62,7 @@ export const register = async (req, res) => {
         sendWelcomeEmail(
             savedUser.email,
             savedUser.fullName,
-            process.env.CLIENT_URL
+            ENV.CLIENT_URL
         ).catch((error) => {
             console.error('Failed to send welcome email:', error);
         });
