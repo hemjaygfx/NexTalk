@@ -3,6 +3,7 @@
   import { generateToken } from '../lib/utils.js';
   import { sendWelcomeEmail } from '../emails/emailHandler.js';
   import { ENV } from '../lib/env.js';
+  import cloudinary from '../lib/cloudinary.js';
 
 export const register = async (req, res) => {
     const { username, fullName, email, password } = req.body;
@@ -112,4 +113,40 @@ export const logout = async (_, res) => {
         maxAge: 0
     });
     res.status(200).json({ message: 'Logged out successfully' });
+};
+
+export const updateProfile = async (req, res) => {
+    try {
+        const { profilePic } = req.body;
+        if (typeof profilePic !== 'string' || !profilePic.trim()) {
+            return res.status(400).json({ message: 'Profile picture is required' });
+        }
+        const userId = req.user._id;
+
+        // Upload the new profile picture to Cloudinary
+        const uploadResponse = await cloudinary.uploader.upload(profilePic, {
+            folder: 'profile_pics',
+            public_id: `user_${userId}`,
+            overwrite: true,
+            resource_type: 'image'
+        });
+
+        // Update the user's profile picture URL in the database
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { profilePic: uploadResponse.secure_url },
+            { new: true }
+        );
+
+        res.status(200).json({
+            _id: updatedUser._id,
+            username: updatedUser.username,
+            fullName: updatedUser.fullName,
+            email: updatedUser.email,
+            profilePic: updatedUser.profilePic
+        });
+    } catch (error) {
+        console.log('Error in updateProfile controller:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
 };
