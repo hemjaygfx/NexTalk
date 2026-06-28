@@ -118,10 +118,9 @@ export const logout = async (_, res) => {
 export const updateProfile = async (req, res) => {
     try {
         const { profilePic } = req.body;
-        if (!profilePic) {
+        if (typeof profilePic !== 'string' || !profilePic.trim()) {
             return res.status(400).json({ message: 'Profile picture is required' });
         }
-
         const userId = req.user._id;
 
         // Upload the new profile picture to Cloudinary

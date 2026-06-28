@@ -22,7 +22,19 @@ export const protectRoute = async (req, res, next) => {
         req.user = user;
         next();
     } catch (error) {
+        // Handle JWT-specific errors as 401
+        if (error.name === 'TokenExpiredError') {
+            return res.status(401).json({ message: 'Unauthorized: Token expired' });
+        }
+        if (error.name === 'JsonWebTokenError') {
+            return res.status(401).json({ message: 'Unauthorized: Invalid token' });
+        }
+        if (error.name === 'NotBeforeError') {
+            return res.status(401).json({ message: 'Unauthorized: Token not yet valid' });
+        }
+
+        // Unexpected errors (database, runtime, etc.) return 500
         console.error('Error in protectRoute middleware:', error);
-        res.status(500).json({ message: 'Unauthorized: Internal server error' });
+        res.status(500).json({ message: 'Internal server error' });
     }
 };
