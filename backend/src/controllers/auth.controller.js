@@ -73,22 +73,22 @@ export const register = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-    const { email, password } = req.body;
-
     try {
+        const { email, password } = req.body ?? {};
+        const normalizedEmail = typeof email === 'string' ? email.trim() : '';
+
         // check if all fields are filled
-        if (!email || !password) {
+        if (!normalizedEmail || typeof password !== 'string' || !password) {
             return res.status(400).json({ message: 'All fields are required' });
         }
 
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email: normalizedEmail });
         if (!user) {
             return res.status(400).json({ message: 'Invalid email or password' });
         } // never tell the user which one is wrong for security reasons
 
         const isMatch = await bcryptjs.compare(password, user.password);
-        if (!isMatch) {
-            return res.status(400).json({ message: 'Invalid email or password' });
+        if (!isMatch) {            return res.status(400).json({ message: 'Invalid email or password' });
         }
 
         generateToken(user._id, res);
