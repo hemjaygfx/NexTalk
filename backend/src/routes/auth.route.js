@@ -12,7 +12,7 @@ router.use(arcjetProtection); // Apply Arcjet protection to all routes in this r
 router.post('/register', register);
 
 // Login endpoint
-router.post('/login', arcjetProtection, login);
+router.post('/login', login);
 
 // Logout endpoint
 router.post('/logout', logout);
