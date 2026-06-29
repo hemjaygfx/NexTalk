@@ -1,8 +1,13 @@
+import { isSpoofedBot } from "`@arcjet/inspect`";
 import aj from "../lib/arcjet.js";
 
 export const arcjetProtection = async (req, res, next) => {
     try {
         const decision = await aj.protect(req);
+
+        if (decision.results?.some(isSpoofedBot)) {
+            return res.status(403).json({ message: "Access denied. Spoofed bot traffic is not allowed." });
+        }
 
         if (decision.isDenied()) {
             const reasonName = decision.reason?.name || decision.reason?.type || "unknown";
