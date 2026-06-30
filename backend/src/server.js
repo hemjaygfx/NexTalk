@@ -14,7 +14,8 @@ import { connectDB } from './lib/db.js';
 const app = express();
 const __dirname = path.resolve();
 
-const PORT=ENV.PORT || 3000;
+const PORT = Number(ENV.PORT || 3000);
+const HOST = process.env.HOST || '0.0.0.0';
 
 app.use(express.json()) // req.body
 app.use(cookieParser()); // req.cookies
@@ -35,8 +36,8 @@ const startServer = async () => {
     try {
         await connectDB();
 
-        app.listen(PORT, () => {
-            console.log(`Server is running on port ${PORT}`);
+        app.listen(PORT, HOST, () => {
+            console.log(`Server is running on http://${HOST}:${PORT}`);
         });
     } catch (error) {
         console.error('Failed to start server:', error);
