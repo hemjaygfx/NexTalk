@@ -7,6 +7,7 @@ import { useAuthStore } from "./store/useAuthStore";
 
 function App() {
   const { authUser, isLoggedIn, Login } = useAuthStore();
+  const { authUser, isLoggedIn, login } = useAuthStore();
 
   console.log("authUser", authUser);
   console.log("isLoggedIn", isLoggedIn);
