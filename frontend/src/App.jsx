@@ -42,7 +42,7 @@ const App = () => {
       <div className="relative z-10">
         <Routes>
           <Route path="/" element={ authUser ? <ChatPage /> : <Navigate to="/login" /> } />
-          <Route path="/login" element={!authUser ? <LoginPage /> : <Navigate to="/login" /> } />
+          <Route path="/login" element={!authUser ? <LoginPage /> : <Navigate to="/" /> } />
           <Route path="/register" element={!authUser ? <RegisterPage /> : <Navigate to="/register" /> } />
         </Routes>
 
