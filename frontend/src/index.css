@@ -2,3 +2,55 @@
 @import "tailwindcss";
 @plugin "daisyui"; 
 
+@property --border-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@theme {
+  --animate-border: border 4s linear infinite;
+
+  @keyframes border {
+    to { --border-angle: 360deg; }
+  }
+}
+
+/* ===== AUTH FORM UTILITY CLASSES (gold theme) ===== */
+.input {
+  @apply w-full bg-[#1e2240] border border-[#2a2d45] rounded-lg py-2 pl-10 pr-4 text-[#f5f5f0] placeholder-[#9090a0] outline-none transition-all;
+  @apply focus:ring-2 focus:ring-[#d4af37] focus:border-transparent;
+}
+
+.auth-input-icon {
+  @apply absolute left-3 top-1/2 -translate-y-1/2 text-[#9090a0] size-5;
+}
+
+.auth-input-label {
+  @apply block text-sm font-medium text-[#9090a0] mb-2;
+}
+
+.auth-badge {
+  @apply inline-flex items-center px-3 py-1 text-xs font-medium rounded-full bg-[#d4af37]/20 text-[#d4af37];
+}
+
+.auth-btn {
+  @apply w-full rounded-lg py-2.5 font-medium transition-opacity;
+  background: #d4af37;
+  color: #0a0e27;
+}
+.auth-btn:hover {
+  background: #b8932e;
+}
+.auth-btn:disabled {
+  opacity: 0.7;
+}
+
+.auth-link {
+  @apply px-4 py-2 inline-block rounded-lg text-sm transition-colors;
+  background: rgba(212, 175, 55, 0.1);
+  color: #d4af37;
+}
+.auth-link:hover {
+  color: #b8932e;
+}
