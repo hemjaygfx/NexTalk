@@ -22,9 +22,10 @@
   @apply focus:ring-2 focus:ring-[#d4af37] focus:border-transparent;
 }
 
-.auth-input-icon {
-  @apply absolute left-3 top-1/2 -translate-y-1/2 text-[#9090a0] size-5;
+  .auth-input-icon {
+  @apply absolute left-3 top-1/2 -translate-y-1/2 text-[#9090a0] size-5 z-10;
 }
+
 
 .auth-input-label {
   @apply block text-sm font-medium text-[#9090a0] mb-2;

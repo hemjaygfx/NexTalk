@@ -1,7 +1,14 @@
 import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import BorderAnimatedContainer from "../components/BorderAnimatedContainer";
-import { MessageCircleIcon, LockIcon, MailIcon, UserIcon, AtSignIcon, LoaderIcon } from "lucide-react";
+import {
+  MessageCircleIcon, 
+  LockIcon, 
+  MailIcon, 
+  UserIcon, 
+  AtSignIcon, 
+  LoaderIcon 
+} from "lucide-react";
 import { Link } from "react-router-dom";
 
 function RegisterPage() {
@@ -123,7 +130,7 @@ function RegisterPage() {
                   className="w-full h-auto object-contain"
                 />
                 <div className="mt-6 text-center">
-                  <h3 className="text-xl font-medium text-[#d4af37]">Join Our Community</h3>
+                  <h3 className="text-xl font-medium text-[#d4af37]">Join Our Community Now</h3>
 
                   <div className="mt-4 flex justify-center gap-4">
                     <span className="auth-badge">Free</span>
