@@ -8,7 +8,8 @@
   },
   "scripts": {
     "build": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
-    "start": "npm run start --prefix backend"
+    "start": "npm run start --prefix backend",
+    "dev": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\""
   },
   "repository": {
     "type": "git",
@@ -23,7 +24,8 @@
   },
   "homepage": "https://github.com/hemjaygfx/NexTalk#readme",
   "devDependencies": {
-    "daisyui": "^5.6.10"
+    "daisyui": "^5.6.10",
+    "concurrently": "^9.0.0"
   },
   "dependencies": {
     "axios": "^1.17.0",
