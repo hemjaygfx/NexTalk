@@ -84,7 +84,7 @@ function ChatPage() {
 
           {/*
             RIGHT SIDE (chat panel)
-            - Mobile: only visible when a chat IS selected
+            - Mobile: only visible when a chat IS selected 
             - Desktop (md+): always visible next to the sidebar
           */}
           <div
