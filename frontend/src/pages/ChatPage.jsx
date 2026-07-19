@@ -17,7 +17,7 @@ function ChatPage() {
       <BorderAnimatedContainer>
         {/* LEFT SIDE */}
         <div
-          className="w-80 bg-slate-800/50 backdrop-blur-sm flex flex-col"
+          className={`w-full md:w-80 bg-slate-800/50 backdrop-blur-sm flex-col ${selectedUser ? "hidden md:flex" : "flex"}`}
         >
           <ProfileHeader />
           <ActiveTabSwitch />
@@ -29,7 +29,7 @@ function ChatPage() {
 
         {/* RIGHT SIDE */}
         <div
-          className="flex-1 flex flex-col bg-slate-900/50 backdrop-blur-sm"
+          className={`flex-1 flex-col bg-slate-900/50 backdrop-blur-sm ${selectedUser ? "flex" : "hidden md:flex"}`}
         >
           {selectedUser ? <ChatContainer /> : <NoConversationPlaceholder />}
         </div>
