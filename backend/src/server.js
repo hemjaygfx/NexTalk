@@ -10,9 +10,9 @@ import cors from 'cors';
 import authRoutes from './routes/auth.route.js';
 import messageRoutes from './routes/message.route.js';
 import { connectDB } from './lib/db.js';
+import { app, server } from './lib/socket.js';
 
 
-const app = express();
 const __dirname = path.resolve();
 
 const PORT = Number(ENV.PORT || 3000);
@@ -41,7 +41,7 @@ const startServer = async () => {
     try {
         await connectDB();
 
-        app.listen(PORT, HOST, () => {
+        server.listen(PORT, HOST, () => {
             const displayHost = HOST === "0.0.0.0" ? "localhost" : HOST;
             console.log(`Server is running on http://${displayHost}:${PORT}`);
         });

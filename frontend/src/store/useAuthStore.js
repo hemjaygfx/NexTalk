@@ -2,18 +2,24 @@
 import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
+import { io } from "socket.io-client";
 
-export const useAuthStore = create((set) => ({
+const BASE_URL = import.meta.env.MODE === "development" ? "http://localhost:3000" : "/";
+
+export const useAuthStore = create((set, get) => ({
   authUser: null,
   isCheckingAuth: true,
   isRegistering: false,
   isLoggingIn: false,
+  socket: null,
+  onlineUsers: [],
 
   checkAuth: async () => {
     set({ isCheckingAuth: true });
     try {
       const response = await axiosInstance.get("/auth/check");
       set({ authUser: response.data });
+      get().connectSocket();
     } catch (error) {
       console.log("Error checking auth:", error);
       set({ authUser: null });
@@ -29,6 +35,7 @@ export const useAuthStore = create((set) => ({
       set({ authUser: response.data });
 
       toast.success("Registration successful! You can now log in.");
+      get().connectSocket();
     } catch (error) {
       toast.error(error.response?.data?.message || "Registration failed");
     } finally {
@@ -43,6 +50,7 @@ export const useAuthStore = create((set) => ({
       set({ authUser: response.data });
 
       toast.success("Logged in successfully!");
+      get().connectSocket();
     } catch (error) {
       toast.error(error.response?.data?.message || "Invalid credentials");
     } finally {
@@ -55,6 +63,7 @@ export const useAuthStore = create((set) => ({
       await axiosInstance.post("/auth/logout");
       set({ authUser: null });
       toast.success("Logged out successfully!");
+      get().disconnectSocket();
     } catch (error) {
       toast.error("Logout failed");
       console.log("Error logging out:", error);
@@ -70,5 +79,28 @@ export const useAuthStore = create((set) => ({
       console.log("Error in update profile:", error);
       toast.error(error.response?.data?.message || "Failed to update profile");
     }
+  },
+  
+  connectSocket: () => {
+    const { authUser } = get();
+    if (!authUser || get().socket) return;
+
+    const socket = io(BASE_URL, {
+      withCredentials: true, // this ensures cookies are sent with the connection
+    });
+
+    socket.connect();
+
+    set({ socket });
+
+    // listen for online users event
+    socket.on("getOnlineUsers", (userIds) => {
+      set({ onlineUsers: userIds });
+    });
+  },
+
+  disconnectSocket: () => {
+    if (get().socket) get().socket.disconnect();
+    set({ socket: null });
   },
 }));
