@@ -94,12 +94,12 @@ export const useChatStore = create((set, get) => ({
     const socket = useAuthStore.getState().socket;
     if (!socket) return;
     socket.on('newMessage', (newMessage) => {
-      const isMessageSentFromSelectedUser = newMessage.receiverId.equals(selectedUser._id);
-      if (isMessageSentFromSelectedUser) return;
+      const isMessageSentFromSelectedUser = newMessage.senderId === selectedUser._id;
+      if (!isMessageSentFromSelectedUser) return;
 
         const currentMessages = get().messages;
         set({ messages: [...currentMessages, newMessage] });
-      }
+    });
     });
 
     if (isSoundEnabled) {
