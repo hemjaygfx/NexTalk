@@ -23,10 +23,6 @@ function RegisterPage() {
 
   const navigate = useNavigate();
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   register(formData);
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,7 +34,7 @@ function RegisterPage() {
 
   return (
       <div className="w-full flex items-center justify-center p-4 bg-slate-900">
-  <div className="relative w-full max-w-7xl md:h-[850px] h-[900px]">
+  <div className="relative w-full max-w- md:h-[850px] h-[900px]">
         <BorderAnimatedContainer>
           <div className="w-full flex flex-col md:flex-row">
 
