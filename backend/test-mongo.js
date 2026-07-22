@@ -1,7 +1,13 @@
 
 import mongoose from "mongoose";
+import "dotenv/config";
 
-const MONGO_URI = 'mongodb://hemjaystarz_db_user:5vb0XK5PjWy15AEd@ac-zzwapcs-shard-00-00.ibgkbbb.mongodb.net:27017,ac-zzwapcs-shard-00-01.ibgkbbb.mongodb.net:27017,ac-zzwapcs-shard-00-02.ibgkbbb.mongodb.net:27017/NexTalk_db?ssl=true&replicaSet=atlas-l8m5nn-shard-0&authSource=admin&appName=Cluster0';
+const MONGO_URI = process.env.MONGO_URI;
+
+if (!MONGO_URI) {
+  console.error('MONGO_URI is not set in your .env file');
+  process.exit(1);
+}
 
 console.log('Testing MongoDB connection...');
 
@@ -21,3 +27,8 @@ async function testConnection() {
 }
 
 testConnection();
+
+
+
+
+

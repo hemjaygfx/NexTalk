@@ -2,6 +2,9 @@
 import Message from '../models/message.model.js';
 import User from '../models/user.model.js';
 
+import cloudinary from "../lib/cloudinary.js";
+import { getReceiverSocketId, io } from "../lib/socket.js";
+
 export const getAllContacts = async (req, res) => {
     try {
         const loggedInUserId = req.user._id;
@@ -64,13 +67,10 @@ export const sendMessage = async (req, res) => {
         });
         await newMessage.save();
 
-        // todo: send message in real-time using socket.io (if implemented)
-        const receiverSocketId = getReceiverSocketId(receiverId);
-        if (!receiverSocketId) {
-            return res.status(404).json({ message: 'Receiver not connected' });
-        }
+            const receiverSocketId = getReceiverSocketId(receiverId);
+    if (receiverSocketId) {
         io.to(receiverSocketId).emit('newMessage', newMessage);
-
+    }
         res.status(201).json(newMessage);
     } catch (error) {
         console.log('Error in sendMessage controller: ', error.message);

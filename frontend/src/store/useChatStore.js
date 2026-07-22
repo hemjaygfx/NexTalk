@@ -2,7 +2,7 @@
 import { create } from "zustand";
 import { toast } from "react-hot-toast";
 import { axiosInstance } from "../lib/axios";
-import useAuthStore from "./useAuthStore";
+import { useAuthStore } from "./useAuthStore";
 
 
 export const useChatStore = create((set, get) => ({
@@ -38,7 +38,7 @@ export const useChatStore = create((set, get) => ({
     getMyChatPartners: async () => {
         set({ isUsersLoading: true });
         try {
-            const response = await axiosInstance.get("/messages/Chats");
+            const response = await axiosInstance.get("/messages/chats");
             set({ chats: response.data });
         } catch (error) {
             toast.error(error.response.data.message);
@@ -107,7 +107,7 @@ export const useChatStore = create((set, get) => ({
     });
   },
 
-  unsubscribeToMessages: () => {
+  unsubscribeFromMessages: () => {
     const socket = useAuthStore.getState().socket;
     if (!socket) return;
     socket.off('newMessage');
