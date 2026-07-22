@@ -31,13 +31,12 @@ export const useAuthStore = create((set, get) => ({
   register: async (data) => {
     set({ isRegistering: true });
     try {
-      const response = await axiosInstance.post("/auth/register", data);
-      set({ authUser: response.data });
-
-      toast.success("Registration successful! You can now log in.");
-      get().connectSocket();
+      await axiosInstance.post("/auth/register", data);
+      toast.success("Registration successful! Please log in.");
+      return true; // signal success to the caller
     } catch (error) {
       toast.error(error.response?.data?.message || "Registration failed");
+      return false;
     } finally {
       set({ isRegistering: false });
     }

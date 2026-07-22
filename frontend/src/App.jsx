@@ -43,7 +43,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={ authUser ? <ChatPage /> : <Navigate to="/login" /> } />
           <Route path="/login" element={!authUser ? <LoginPage /> : <Navigate to="/" /> } />
-          <Route path="/register" element={!authUser ? <RegisterPage /> : <Navigate to="/register" /> } />
+          <Route path="/register" element={!authUser ? <RegisterPage /> : <Navigate to="/" /> } />
         </Routes>
 
         <Toaster/>

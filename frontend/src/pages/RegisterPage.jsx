@@ -10,6 +10,7 @@ import {
   LoaderIcon 
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -20,14 +21,24 @@ function RegisterPage() {
   });
   const { register, isRegistering } = useAuthStore();
 
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   register(formData);
+  // };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    register(formData);
-  };
+    const success = await register(formData);
+    if (success) {
+      navigate("/login");
+    }
+};
 
   return (
       <div className="w-full flex items-center justify-center p-4 bg-slate-900">
-  <div className="relative w-full max-w-7xl md:h-[800px] h-[650px]">
+  <div className="relative w-full max-w-7xl md:h-[850px] h-[900px]">
         <BorderAnimatedContainer>
           <div className="w-full flex flex-col md:flex-row">
 
